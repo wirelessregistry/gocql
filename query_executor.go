@@ -93,7 +93,7 @@ func (q *queryExecutor) do(ctx context.Context, qry ExecutableQuery) *Iter {
 	var iter *Iter
 	for selectedHost != nil {
 		host := selectedHost.Info()
-		fmt.Printf("Selected host: %v\n", host.HostnameAndPort())
+		//fmt.Printf("Selected host: %v\n", host.HostnameAndPort())
 		if host == nil || !host.IsUp() {
 			fmt.Printf("Host %v is down.\n", host.HostnameAndPort())
 			selectedHost = hostIter()
@@ -113,7 +113,7 @@ func (q *queryExecutor) do(ctx context.Context, qry ExecutableQuery) *Iter {
 			selectedHost = hostIter()
 			continue
 		}
-		fmt.Printf("Sending query to: %v\n", host.HostnameAndPort())
+		//fmt.Printf("Sending query to: %v\n", host.HostnameAndPort())
 		iter = q.attemptQuery(ctx, qry, conn)
 		iter.host = selectedHost.Info()
 		// Update host
