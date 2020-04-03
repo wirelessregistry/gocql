@@ -72,7 +72,7 @@ func getStrategy(ks *KeyspaceMetadata) placementStrategy {
 	fmt.Printf("ks.StrategyClass: %v\n", ks.StrategyClass)
 	fmt.Printf("ks.StrategyOptions: %v\n", ks.StrategyOptions)
 	switch {
-	case strings.Contains(ks.StrategyClass, "SimpleStrategy"), strings.Contains(ks.StrategyClass, "DefaultReplication"):
+	case strings.Contains(ks.StrategyClass, "SimpleStrategy"):
 		return &simpleStrategy{rf: getReplicationFactorFromOpts(ks.Name, ks.StrategyOptions["replication_factor"])}
 	case strings.Contains(ks.StrategyClass, "NetworkTopologyStrategy"):
 		dcs := make(map[string]int)
@@ -84,7 +84,7 @@ func getStrategy(ks *KeyspaceMetadata) placementStrategy {
 			dcs[dc] = getReplicationFactorFromOpts(ks.Name+":dc="+dc, rf)
 		}
 		return &networkTopology{dcs: dcs}
-	case strings.Contains(ks.StrategyClass, "LocalStrategy"):
+	case strings.Contains(ks.StrategyClass, "LocalStrategy"), strings.Contains(ks.StrategyClass, "DefaultReplication"):
 		return nil
 	default:
 		// TODO: handle unknown replicas and just return the primary host for a token
