@@ -69,8 +69,10 @@ func getReplicationFactorFromOpts(keyspace string, val interface{}) int {
 }
 
 func getStrategy(ks *KeyspaceMetadata) placementStrategy {
+	fmt.Println("ks.StrategyClass: " + ks.StrategyClass)
+	fmt.Println("ks.StrategyOptions: " + ks.StrategyOptions)
 	switch {
-	case strings.Contains(ks.StrategyClass, "SimpleStrategy"), strings.Contains(ks.StrategyClass, "DefaultStrategy"):
+	case strings.Contains(ks.StrategyClass, "SimpleStrategy"), strings.Contains(ks.StrategyClass, "DefaultReplication"):
 		return &simpleStrategy{rf: getReplicationFactorFromOpts(ks.Name, ks.StrategyOptions["replication_factor"])}
 	case strings.Contains(ks.StrategyClass, "NetworkTopologyStrategy"):
 		dcs := make(map[string]int)
