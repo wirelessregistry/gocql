@@ -162,7 +162,6 @@ func newTokenRing(partitioner string, hosts []*HostInfo) (*tokenRing, error) {
 		for _, strToken := range host.Tokens() {
 			token := tokenRing.partitioner.ParseString(strToken)
 			tokenRing.tokens = append(tokenRing.tokens, hostToken{token, host})
-			//fmt.Printf("Assignign token %v to host %v\n", token, host.HostnameAndPort())
 		}
 	}
 

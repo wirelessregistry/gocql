@@ -69,8 +69,6 @@ func getReplicationFactorFromOpts(keyspace string, val interface{}) int {
 }
 
 func getStrategy(ks *KeyspaceMetadata) placementStrategy {
-	fmt.Printf("ks.StrategyClass: %v\n", ks.StrategyClass)
-	fmt.Printf("ks.StrategyOptions: %v\n", ks.StrategyOptions)
 	switch {
 	case strings.Contains(ks.StrategyClass, "SimpleStrategy"):
 		return &simpleStrategy{rf: getReplicationFactorFromOpts(ks.Name, ks.StrategyOptions["replication_factor"])}

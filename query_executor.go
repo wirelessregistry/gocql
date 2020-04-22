@@ -2,7 +2,6 @@ package gocql
 
 import (
 	"context"
-	"fmt"
 	"time"
 )
 
@@ -93,27 +92,22 @@ func (q *queryExecutor) do(ctx context.Context, qry ExecutableQuery) *Iter {
 	var iter *Iter
 	for selectedHost != nil {
 		host := selectedHost.Info()
-		//fmt.Printf("Selected host: %v\n", host.HostnameAndPort())
 		if host == nil || !host.IsUp() {
-			fmt.Printf("Host %v is down.\n", host.HostnameAndPort())
 			selectedHost = hostIter()
 			continue
 		}
 
 		pool, ok := q.pool.getPool(host)
 		if !ok {
-			fmt.Printf("Host %v not in pool.\n", host.HostnameAndPort())
 			selectedHost = hostIter()
 			continue
 		}
 
 		conn := pool.Pick()
 		if conn == nil {
-			fmt.Printf("Host %v not connected.\n", host.HostnameAndPort())
 			selectedHost = hostIter()
 			continue
 		}
-		//fmt.Printf("Sending query to: %v\n", host.HostnameAndPort())
 		iter = q.attemptQuery(ctx, qry, conn)
 		iter.host = selectedHost.Info()
 		// Update host
